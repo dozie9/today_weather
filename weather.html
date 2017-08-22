@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+    <title>Local Weather</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery.js"></script>
+    <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Bhaijaan" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script>
+        $(document).ready(function () {
+            var latitude;
+            var longitude;
+            var location;
+            var icon;
+            var temp;
+            var fahrenheit;
+            if (navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    latitude = position.coords.latitude;
+                    longitude = position.coords.longitude;
+                    console.log(latitude);
+
+
+                    $.ajax({
+                        url: "https://fcc-weather-api.glitch.me/api/current?lat="+latitude+"&lon="+longitude,
+                        dataType: 'jsonp',
+                        success: function (data) {
+                            console.log(data);
+                            location = data.name + ', ' + data.sys.country;
+                            icon = data.weather[0].icon;
+                            temp = Math.round(data.main.temp);
+                            var des = data.weather[0].main;
+                            $('#data').html(location);
+                            $('#icon').html("<img alt='weather icon' src='" + icon + "'>");
+                            $('#temp').html(temp+'°C');
+                            fahrenheit = Math.round(temp * 9/5 + 32);
+                            $('#fah').html(fahrenheit+'°F');
+                            $('#desc').html(des);
+
+
+                        }
+                    });
+
+
+                })
+            }
+
+
+        })
+    </script>
+<style>
+    body{
+        background-color: #dddddd;
+        font-family: 'Baloo Bhaijaan', cursive;
+    }
+    .margT{
+        margin-top: 4em;
+    }
+    .foonts{
+        font-size: 1.5em;
+    }
+</style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="text-center"><h1> Today's Weather</h1></div>
+
+    <div id = "data" class="text-center foonts">
+
+    </div>
+    <div id="icon" class="text-center">
+
+    </div>
+    <div id="desc" class="text-center foonts">
+
+    </div>
+    <div id="temp" class="text-center margT foonts">
+
+    </div>
+    <div id="fah" style="display: none" class="foonts text-center margT">
+
+    </div>
+    <script>
+        function tog() {
+            var x = document.getElementById('fah');
+            var y = document.getElementById('temp');
+            if (x.style.display === 'none'){
+                x.style.display = 'block';
+                y.style.display = 'none';
+            }else{
+                x.style.display = 'none';
+                y.style.display = 'block';
+            }
+        }
+    </script>
+        <div class="text-center">
+            <button class="btn btn-outline-primary" onclick="tog()">C/F</button>
+        </div>
+    <footer class="text-center">
+      <hr>
+      <p>Chidozie | <a href="https://facebook.com/dozie9" target="_blank"><i class="fa fa-facebook-square"></i></a> | <a href="https://www.linkedin.com/in/chidozie-ogwuniru-1b0366113" target="_blank"><i class="fa fa-linkedin-square"></i></a> | <a href="https://github.com/dozie9" target="_blank"><i class="fa fa-github-square"></i></a> | <a href="https://twitter.com/dozie9" target="_blank"><i class="fa fa-twitter-square"></i></a> </p>
+    </footer>
+    </div>
+
+</body>
+</html>
